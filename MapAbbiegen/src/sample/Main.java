@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,6 +44,7 @@ public class Main extends Application {
     int maxY = 0;
 
     int margin = 10;
+    int pointW=10;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -52,7 +54,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(scrollPane, WIDTH, HEIGHT));
         primaryStage.show();
 
-        String currentMap = map3;
+        String currentMap = map1;
         readData(currentMap);
         draw(currentMap);
     }
@@ -99,11 +101,15 @@ public class Main extends Application {
             y = Integer.parseInt(coords[1]);
             start = new Point2D(x, y);
             map[x][y] = -1;
+            gc.setFill(javafx.scene.paint.Color.GREEN);
+            gc.fillOval(x*unitDist+2.5, (maxY-y)*unitDist+2.5, 15,15);
             coords = reader.readLine().replace("(", "").replace(")", "").split(",");
             x = Integer.parseInt(coords[0]);
             y = Integer.parseInt(coords[1]);
             end = new Point2D(x, y);
             map[x][y] = 0;
+            gc.setFill(javafx.scene.paint.Color.RED);
+            gc.fillOval(x*unitDist+2, (maxY-y)*unitDist+2, 15,15);
             for (int i = 1; i <= numRoads; i++) {
                 coords = reader.readLine().replace("(", "").replace(")", "").replace(" ", ",").split(",");
                 x = Integer.parseInt(coords[0]);
@@ -113,6 +119,10 @@ public class Main extends Application {
                 map[x][y] = i;
                 map[x1][y1] = i;
                 gc.strokeLine(margin+x*unitDist, margin+(maxY-y)*unitDist, margin+x1*unitDist, margin+(maxY-y1)*unitDist);
+                gc.setFill(javafx.scene.paint.Color.BLACK);
+                gc.fillOval(x * unitDist +0.5*pointW, (maxY - y) * unitDist +0.5*pointW, pointW, pointW);
+                gc.fillOval(x1 * unitDist+0.5*pointW, (maxY - y1) * unitDist + 0.5*pointW, pointW, pointW);
+                // if((start.getX() != x && start.getY() != y)|| (end.getX() != x1 && end.getY() != y1))
             }
         } catch (IOException e) {
             e.printStackTrace();
